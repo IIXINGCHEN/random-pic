@@ -253,7 +253,7 @@ allowEmptyReferer = "false"
 allowDirectAccess = "false"
 
 # 受信任的域名列表，多个域名用逗号分隔
-trustedDomains = "hrandom-pic.imixc.top,api-hrandom-pic.imixc.top,vrandom-pic.imixc.top,api-vrandom-pic.imixc.top"
+trustedDomains = "hrandom-pic.yourdomain.com,api-hrandom-pic.yourdomain.com"
 ```
 
 ### 配置说明
