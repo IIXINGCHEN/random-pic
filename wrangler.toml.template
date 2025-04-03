@@ -1,0 +1,176 @@
+# ================================================================
+# Cloudflare Worker 配置文件模板 (wrangler.toml)
+# ================================================================
+# 使用说明:
+# 1. 将此文件重命名为 wrangler.toml
+# 2. 替换所有标记为 <YOUR_XXX> 的占位符
+# 3. 根据项目需求调整配置
+# ================================================================
+
+# ================================================================
+# 基本项目配置（适用于所有环境）
+# ================================================================
+
+# 项目名称，将用于 Cloudflare Dashboard 和 worker 的子域名
+name = "<YOUR_WORKER_NAME>"
+
+# 兼容性日期，指定 Worker 运行时应使用的特性集版本
+# 建议使用较新的日期以利用最新功能和修复
+# 参考: https://developers.cloudflare.com/workers/platform/compatibility-dates/
+compatibility_date = "<YYYY-MM-DD>"  # 推荐使用当前年份+6个月
+
+# Worker 的入口文件路径 (相对于 wrangler.toml)
+# 确保这个路径指向你包含主要逻辑的 JS/TS 文件
+main = "src/index.js"  # 根据你的项目结构调整
+
+# ----------------------------------------------------------------
+# 【重要安全设置】预览 URL 配置
+# ----------------------------------------------------------------
+# ⚠️ 安全警告：workers.dev 子域名必须被禁用以防止未授权访问 ⚠️
+# 此设置确保只有显式配置的自定义域名才能访问此 Worker
+# 不要在任何环境中启用此设置，除非有特定的安全考量和审核
+workers_dev = false
+
+# ================================================================
+# 开发环境配置
+# 如无需开发环境，请保持注释状态
+# ================================================================
+# [env.development]
+# # 开发环境特定的名称
+# name = "<YOUR_WORKER_NAME>-dev"
+# 
+# # 开发环境中使用的域名
+# routes = [
+#   { pattern = "dev-<YOUR_SUBDOMAIN_1>.<YOUR_DOMAIN>/*", zone_name = "<YOUR_DOMAIN>" },
+#   { pattern = "dev-<YOUR_SUBDOMAIN_2>.<YOUR_DOMAIN>/*", zone_name = "<YOUR_DOMAIN>" }
+# ]
+# 
+# # 开发环境变量
+# [env.development.vars]
+# # 自定义变量
+# customVar1 = "dev-value1"
+# customVar2 = "dev-value2"
+# 
+# # API 限流设置
+# rateLimit = "10"
+# rateLimitWindow = "60"
+# 
+# # 缓存设置
+# cacheTtl = "60"  # 1分钟（开发环境通常使用较短的缓存时间）
+# 
+# # 允许在开发环境中更宽松的访问控制
+# allowEmptyReferer = "true"
+# allowDirectAccess = "true"
+# trustedDomains = "localhost,dev-<YOUR_SUBDOMAIN>.<YOUR_DOMAIN>"
+# 
+# # 开发环境 KV Namespace 绑定
+# [[env.development.kv_namespaces]]
+# binding = "<YOUR_KV_BINDING_NAME>"
+# id = "<YOUR_DEV_KV_NAMESPACE_ID>"
+# 
+# # 开发环境 R2 Bucket 绑定
+# [[env.development.r2_buckets]]
+# binding = "<YOUR_R2_BINDING_NAME>"
+# bucket_name = "<YOUR_DEV_BUCKET_NAME>"
+
+# ================================================================
+# 生产环境配置
+# 使用命令: `wrangler deploy --env production`
+# ================================================================
+[env.production]
+# 生产环境 Worker 名称
+name = "<YOUR_WORKER_NAME>"
+
+# ----------------------------------------------------------------
+# 预览 URL 设置 - 安全考虑
+# ----------------------------------------------------------------
+# 禁用 workers.dev 子域名访问 - 这是一项重要的安全措施
+# 这确保只有在 routes 中明确配置的自定义域名可以访问此 worker
+workers_dev = false
+
+# ----------------------------------------------------------------
+# 生产环境使用的域名
+# 使用对象格式指定每个路由的区域名称
+# ----------------------------------------------------------------
+routes = [
+  { pattern = "<YOUR_SUBDOMAIN_1>.<YOUR_DOMAIN>/*", zone_name = "<YOUR_DOMAIN>" },
+  { pattern = "<YOUR_SUBDOMAIN_2>.<YOUR_DOMAIN>/*", zone_name = "<YOUR_DOMAIN>" }
+]
+
+# ----------------------------------------------------------------
+# 生产环境变量
+# 这些变量将通过 c.env.<变量名> 在 Worker 代码中访问
+# ----------------------------------------------------------------
+[env.production.vars]
+# 自定义应用程序变量 - 根据项目需求替换
+customVar1 = "value1"
+customVar2 = "value2"
+
+# 速率限制设置
+rateLimit = "50"            # 每窗口最大请求数
+rateLimitWindow = "60"      # 速率限制时间窗口（秒）
+
+# 缓存设置
+cacheTtl = "3600"           # CDN 和浏览器缓存生存时间（秒）
+
+# 安全设置 - 根据项目需求调整
+trustedIps = "<COMMA_SEPARATED_IP_LIST>"  # 白名单IP，跳过速率限制
+
+# ----------------------------------------------------------------
+# 生产环境安全配置
+# 这些配置控制谁可以访问您的资源，移除会导致安全风险
+# ----------------------------------------------------------------
+# 启用防盗链保护
+enableHotlinkProtection = "true"
+
+# 允许空Referer的请求
+allowEmptyReferer = "false"
+
+# 允许直接访问
+allowDirectAccess = "false"
+
+# 受信任的域名列表，多个域名用逗号分隔
+trustedDomains = "<YOUR_SUBDOMAIN_1>.<YOUR_DOMAIN>,<YOUR_SUBDOMAIN_2>.<YOUR_DOMAIN>"
+
+# ----------------------------------------------------------------
+# 生产环境 KV Namespace 绑定
+# ----------------------------------------------------------------
+[[env.production.kv_namespaces]]
+binding = "<YOUR_KV_BINDING_NAME>"
+# 生产环境使用的 KV Namespace 的 ID
+id = "<YOUR_PRODUCTION_KV_NAMESPACE_ID>"
+
+# ----------------------------------------------------------------
+# 生产环境 R2 Bucket 绑定
+# ----------------------------------------------------------------
+[[env.production.r2_buckets]]
+binding = "<YOUR_R2_BINDING_NAME>"
+# 生产环境使用的 R2 Bucket 的名称
+bucket_name = "<YOUR_PRODUCTION_BUCKET_NAME>"
+
+# ----------------------------------------------------------------
+# 生产环境 Secrets 绑定 【极其重要】
+# ----------------------------------------------------------------
+# 使用 `wrangler secret put <SECRET_NAME> --env production` 命令设置密钥值
+[env.production.secrets]
+# 定义 Secret 绑定，值需要通过命令安全地设置
+# 注意: 不要在此文件中设置实际的密钥值!
+API_KEY = ""         # 使用: wrangler secret put API_KEY --env production
+DB_PASSWORD = ""     # 使用: wrangler secret put DB_PASSWORD --env production
+
+# ================================================================
+# 部署说明:
+# ================================================================
+# 开发环境（如需启用）: 
+#   1. 取消注释 [env.development] 部分的配置
+#   2. 设置开发环境密钥: wrangler secret put <SECRET_NAME> --env development
+#   3. 启动开发服务器: wrangler dev --env development
+#
+# 生产环境:
+#   1. 替换所有 <YOUR_XXX> 占位符为实际值
+#   2. 设置生产环境密钥: wrangler secret put <SECRET_NAME> --env production
+#   3. 部署到生产环境: wrangler deploy --env production
+#   4. 部署后验证安全性:
+#      - 确认 workers.dev 子域名无法访问 (https://<YOUR_WORKER_NAME>.<YOUR_USERNAME>.workers.dev 应返回错误)
+#      - 确认只有配置的自定义域名可以访问服务
+# ================================================================ 
