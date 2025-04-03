@@ -20,8 +20,8 @@
 ### 安装步骤
 1. 克隆仓库到本地:
 ```bash
-git clone <仓库地址>
-cd <项目文件夹>
+git clone https://github.com/IIXINGCHEN/random-pic.git
+cd random-pic
 ```
 
 2. 安装依赖:
