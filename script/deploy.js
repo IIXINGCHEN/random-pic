@@ -85,9 +85,9 @@ try {
     // 部署成功
     log.success('部署成功！');
     log.info('访问以下URL测试服务:');
-    log.info(`- 水平图片: ${colors.cyan}https://hrandom-pic.onani.cn${colors.reset}`);
-    log.info(`- 垂直图片: ${colors.cyan}https://vrandom-pic.onani.cn${colors.reset}`);
-    log.info(`- 图片数量API: ${colors.cyan}https://api-hrandom-pic.onani.cn${colors.reset}`);
+    log.info(`- 水平图片: ${colors.cyan}https://hrandom-pic.example.com${colors.reset}`);
+    log.info(`- 垂直图片: ${colors.cyan}https://vrandom-pic.example.com${colors.reset}`);
+    log.info(`- 图片数量API: ${colors.cyan}https://api-hrandom-pic.example.com${colors.reset}`);
 
     // 恢复配置文件
     fs.copyFileSync(backupPath, wranglerPath);
