@@ -68,9 +68,9 @@ if "%ENVIRONMENT%"=="production" (
 if %ERRORLEVEL% equ 0 (
     echo ✅ 部署成功！
     echo 访问以下URL测试服务:
-    echo - 水平图片: https://hrandom-pic.onani.cn
-    echo - 垂直图片: https://vrandom-pic.onani.cn
-    echo - 图片数量API: https://api-hrandom-pic.onani.cn
+    echo - 水平图片: https://hrandom-pic.example.com
+    echo - 垂直图片: https://vrandom-pic.example.com
+    echo - 图片数量API: https://api-hrandom-pic.example.com
 ) else (
     echo ❌ 部署失败！恢复配置...
     :: 恢复配置文件
